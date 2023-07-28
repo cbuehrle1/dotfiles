@@ -1,0 +1,63 @@
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/cask-fonts"
+tap "homebrew/core"
+tap "homebrew/services"
+
+# Text editors
+brew "ctags-exuberant"
+brew "markdown"
+brew "vim"
+
+# Terminal Tools
+brew "ack"
+brew "amazon-ecs-cli"
+brew "awscli"
+brew "coreutils"
+brew "fzf"
+brew "gh"
+brew "git"
+brew "gpg"
+brew "gron"
+brew "hub"
+brew "jq"
+brew "nmap"
+brew "proctools"
+brew "reattach-to-user-namespace"
+brew "the_silver_searcher"
+brew "tmux"
+brew "wget"
+cask "aws-vault"
+
+# Application Dependencies
+brew "autoconf"
+brew "automake"
+brew "awslogs"
+brew "binutils"
+brew "bison"
+brew "chruby"
+brew "gcc"
+brew "gdbm" 
+brew "imagemagick"
+brew "libffi"
+brew "libksba"
+brew "libyaml"
+brew "make"
+brew "memcached"
+brew "openssl@1.1"
+brew "openssl@3"
+brew "readline"
+brew "redis"
+brew "ruby-install"
+
+# Hashicorp Tools
+brew "consul"
+brew "nomad"
+brew "vault"
+
+# Databases
+brew "postgresql"
+
+# Javascript
+brew "nvm"
+brew "yarn"

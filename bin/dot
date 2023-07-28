@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# dot
+#
+# `dot` handles installation, updates, things like that. Run it periodically
+# to make sure you're on the latest and greatest.
+export DOTHOME=$HOME/.dotfiles
+
+DISTRO=$(uname)
+case $DISTRO in
+  'Linux')
+    sudo apt-get update
+    sudo apt-get -y -q upgrade
+    ;;
+  'Darwin')
+    # Set OS X defaults
+    sh $DOTHOME/osx/set-defaults.sh
+    # Install/upgrade nodes
+    sh $DOTHOME/node/install.sh 2>&1
+    # Install/upgrade homebrew packages
+    echo "Homebrew update"
+    sh $DOTHOME/homebrew/install.sh 2>&1
+    echo "Docker update"
+    sh $DOTHOME/docker/install.sh 2>&1
+    # Install/upgrade rubies
+    echo "Ruby update"
+    sh $DOTHOME/ruby/install.sh 2>&1
+    # Symlink databases
+    echo "Database(s) update"
+    sh $DOTHOME/databases/install.sh 2>&1
+    ;;
+  *)
+    echo "Good luck with that"
+    ;;
+esac
+
+# Install vim bundles
+$DOTHOME/vim/install.sh 2>&1

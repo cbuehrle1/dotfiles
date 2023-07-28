@@ -1,0 +1,86 @@
+# shortcut to this dotfiles path is $DOTHOME
+export DOTHOME=$HOME/.dotfiles
+
+# source folder that we can `scd [tab]` into
+export SOURCE_DIR=$HOME/src
+
+# all of our zsh files
+typeset -U config_files
+config_files=($DOTHOME/**/*.zsh)
+
+# load the path files
+for file in ${(M)config_files:#*/path.zsh}
+do
+  source $file
+done
+
+# load everything but the path and completion files
+for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
+do
+  source $file
+done
+
+# initialize autocomplete here, otherwise functions won't be loaded
+autoload -Uz compinit
+compinit
+
+# load every completion after autocomplete loads
+for file in ${(M)config_files:#*/completion.zsh}
+do
+  source $file
+done
+
+unset config_files
+
+# I want to use [ and ] damn it!
+unsetopt nomatch
+
+# set cd autocompletion to commonly visited directories
+cdpath=(. ~ ~/src $SOURCE_DIR)
+
+# go, rust, et al
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# chruby!
+# osx location - option 1
+[[ ! -a /usr/local/opt/chruby/share/chruby/chruby.sh ]] || source /usr/local/opt/chruby/share/chruby/chruby.sh
+[[ ! -a /usr/local/opt/chruby/share/chruby/auto.sh ]] || source /usr/local/opt/chruby/share/chruby/auto.sh
+# macos location - option 2
+[[ ! -a /opt/homebrew/opt/chruby/share/chruby/chruby.sh ]] || source /opt/homebrew/opt/chruby/share/chruby/chruby.sh
+[[ ! -a /opt/homebrew/opt/chruby/share/chruby/auto.sh ]] || source /opt/homebrew/opt/chruby/share/chruby/auto.sh
+# ubuntu location
+[[ ! -a /usr/local/share/chruby/chruby.sh ]] || source /usr/local/share/chruby/chruby.sh
+[[ ! -a /usr/local/share/chruby/auto.sh ]] || source /usr/local/share/chruby/auto.sh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm on newer Homebrew installs
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+
+if [ -d /opt/homebrew/opt ]; then
+  export PATH="/opt/homebrew/bin:/opt/homebrew/opt/openssl@1.1/bin:$PATH"
+  export PATH="/opt/homebrew/sbin:$PATH"
+  export CPPFLAGS="-I/opt/homebrew/opt/libffi/include -I/opt/homebrew/opt/openssl@1.1/include -I/opt/homebrew/opt/readline/include -I/opt/homebrew/opt/binutils/include"
+  export LDFLAGS="-L/opt/homebrew/opt/bison/lib -L/opt/homebrew/opt/libffi/lib -L/opt/homebrew/opt/openssl@1.1/lib -L/opt/homebrew/opt/readline/lib -L/opt/homebrew/opt/binutils/lib"
+  export PKG_CONFIG_PATH="/opt/homebrew/opt/libffi/lib/pkgconfig:/opt/homebrew/opt/openssl@1.1/lib/pkgconfig:/opt/homebrew/opt/readline/lib/pkgconfig"
+  export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/opt/homebrew/opt/openssl@1.1"
+else
+  export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+  export CPPFLAGS="-I/usr/local/opt/libffi/include -I/usr/local/opt/openssl@1.1/include -I/usr/local/opt/readline/include -I/usr/local/opt/binutils/include"
+  export LDFLAGS="-L/usr/local/opt/bison/lib -L/usr/local/opt/libffi/lib -L/usr/local/opt/openssl@1.1/lib -L/usr/local/opt/readline/lib -L/usr/local/opt/binutils/lib"
+  export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig:/usr/local/opt/openssl@1.1/lib/pkgconfig:/usr/local/opt/readline/lib/pkgconfig"
+  export RUBY_CONFIGURE_OPTS="--with-openssl-dir=/usr/local/opt/openssl@1.1"
+fi
+
+export DOCKER_PLATFORM="linux/$(uname -m)"
+
+# import local zsh customizations, if present
+zrcl="$HOME/.zshrc.local"
+
+[[ ! -a $zrcl ]] || source $zrcl
+
+export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/postgresql@15/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/postgresql@15/include"
