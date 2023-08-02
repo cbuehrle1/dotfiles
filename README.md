@@ -7,7 +7,7 @@ These dotfiles based on [Zach Holman](https://github.com/holman)'s [dotfiles](ht
 Run this:
 
 ```sh
-git clone https://github.com/kalkomey/dotfiles.git ~/.dotfiles
+git clone https://github.com/cbuehrl1/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 script/bootstrap
 ```
