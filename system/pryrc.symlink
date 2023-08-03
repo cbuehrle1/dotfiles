@@ -2,3 +2,17 @@
   path = File.expand_path file
   load path if File.exist?(path)
 end
+
+Pry::Commands.block_command 'pl', "Alias for 'play -l'" do |lines|
+  pry_instance.run_command("play -l #{lines}")
+end
+
+# this creates the command `fmn`, you would use it like `fmn 1 1`. 
+# To call the new FlowManager instance, you would use `_` as the variable, so you would just call `_.run` inside pry
+Pry::Commands.block_command "fmn", "Alias for 'fm = Managers::FlowManger.new(Flow.find(<id>), Client.find(<id>))'", :keep_retval => true do |flow_id, client_id|
+  Managers::FlowManager.new(Flow.find(flow_id), Client.find(client_id))
+end
+
+Pry::Commands.block_command 'ee', "Alias for 'exit!'" do
+  exit
+end
